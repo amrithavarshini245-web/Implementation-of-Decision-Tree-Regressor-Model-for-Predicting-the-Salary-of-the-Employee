@@ -8,12 +8,13 @@ To write a program to implement the Decision Tree Regressor Model for Predicting
 2. Anaconda – Python 3.7 Installation / Jupyter notebook
 
 ## Algorithm
-1. Create a small employee dataset with Level, Position_CLevel, and Salary columns.
-2. Split the data into features (X = Level and Position_CLevel) and target (y = Salary).
-3. Train a DecisionTreeClassifier on the entire dataset (X, y) so it can learn the exact salary classes.
-4. Predict the salaries using the same training data to get the y_pred values.
-5. Evaluate the model by printing the accuracy score and classification report.
-6. Visualize the trained decision tree using plot_tree() with the feature names.
+1. Import the standard libraries.
+2. Upload the dataset and check for any null values using .isnull() function.
+3. Import LabelEncoder and encode the dataset.
+4. Import DecisionTreeRegressor from sklearn and apply the model on the dataset.
+5. Predict the values of arrays.
+6. Import metrics from sklearn and calculate the MSE and R2 of the model on the dataset.
+7. Predict the values of array. 8.Apply to new unknown values.
 
 ## Program:
 ```
@@ -24,43 +25,41 @@ RegisterNumber: 212224250002
 */
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor, plot_tree
 from sklearn.metrics import accuracy_score, classification_report
-
-df = pd.DataFrame({
-    "Level": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-    "Position_CLevel": [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-    "Salary": [45000, 50000, 60000, 80000, 110000, 150000, 200000, 
-               300000, 500000, 1000000, 2000000, 3000000, 4000000]
-})
-
-X = df.drop("Salary", axis=1)
-y = df["Salary"]
-
-model = DecisionTreeClassifier(random_state=42)
+data = pd.read_csv("Salary.csv")
+X = data.drop("Salary", axis=1)
+y = data["Salary"]
+X = pd.get_dummies(X, drop_first=True)
+X_train, X_test, y_train, y_test = train_test_split(    X, y, test_size=0.2, random_state=42)
+model = DecisionTreeRegressor(random_state=42)
 model.fit(X, y)
-
 y_pred = model.predict(X)
+# Accuracy
+print("\nAccuracy:", accuracy_score(y, y_pred)*100)
 
-print("Accuracy:", accuracy_score(y, y_pred) * 100)
-print("\nClassification Report:\n", classification_report(y, y_pred))
+# Classification Report
+print("\nClassification Report:")
+print(classification_report(y, y_pred))
 
-plt.figure(figsize=(20, 10))
+plt.figure(figsize=(25,12))
 plot_tree(
     model,
     feature_names=X.columns,
-    filled=True,
-    rounded=True,
-    fontsize=10
+    filled=True
 )
+
 plt.title("Decision Tree Regressor")
 plt.show()
+
 
 ```
 
 ## Output:
-<img width="573" height="488" alt="image" src="https://github.com/user-attachments/assets/75806ab9-9999-463e-b976-d25c4faf3e23" />
-<img width="1570" height="812" alt="image" src="https://github.com/user-attachments/assets/cf11f2c3-1e11-455f-be56-003a325407e5" />
+<img width="562" height="437" alt="image" src="https://github.com/user-attachments/assets/457257f7-a1b0-4aa3-895e-dfe0f268e46c" />
+<img width="1957" height="966" alt="image" src="https://github.com/user-attachments/assets/539e876b-9112-4630-a85a-8dc9796dc3c1" />
+
 
 
 ## Result:
